@@ -18,8 +18,8 @@ variable "key_name" {
     type = string
 }
 
-resource "aws_security_group" "jenkins_sg" {
-  name        = "jenkins_sg"
+resource "aws_security_group" "jenkins_sg1" {
+  name        = "jenkins_sg1"
   description = "Allow Jenkins Traffic"
   vpc_id      = var.vpc_id
 
@@ -93,13 +93,13 @@ resource "aws_iam_role" "test_role" {
 EOF
 }
 
-resource "aws_iam_instance_profile" "test_profile" {
-  name = "test_profile"
+resource "aws_iam_instance_profile" "test_profile1" {
+  name = "test_profile1"
   role = "${aws_iam_role.test_role.name}"
 }
 
-resource "aws_iam_role_policy" "test_policy" {
-  name = "test_policy"
+resource "aws_iam_role_policy" "test_policy1" {
+  name = "test_policy1"
   role = "${aws_iam_role.test_role.id}"
 
   policy = <<EOF
@@ -117,11 +117,11 @@ EOF
 }
 
 resource "aws_instance" "web" {
-  ami             = "ami-04c913012f8977029"
+  ami             = "ami-01b799c439fd5516a"
   instance_type   = "t2.medium" 
   key_name        = var.key_name
-  iam_instance_profile = "${aws_iam_instance_profile.test_profile.name}"
-  security_groups = [aws_security_group.jenkins_sg.name]
+  iam_instance_profile = "${aws_iam_instance_profile.test_profile1.name}"
+  security_groups = [aws_security_group.jenkins_sg1.name]
   user_data       = "${file("install_jenkins.sh")}"
   tags = {
     Name = "Jenkins"
